@@ -1,68 +1,103 @@
-# Nota Sign 电子签名工具
+# @notasign/skill
 
-基于 Nota Sign API 的命令行电子签名工具。
+TypeScript implementation for Nota Sign electronic signature platform with complete API coverage, envelope management, document upload, and automated signing workflows.
 
-## 安装
-
-确保已安装 Node.js 18+，然后解压 skill 包即可使用。
-
-## 配置
-
-首次使用需要配置 API 凭证：
+## Installation
 
 ```bash
-npx tsx scripts/send_envelope.ts init
+npm install @notasign/skill
 ```
 
-按提示输入：
+Or use directly with npx:
+
+```bash
+npx @notasign/skill init
+```
+
+## Quick Start
+
+### 1. Initialize Configuration
+
+```bash
+npx @notasign/skill init
+```
+
+You will be prompted to enter:
 - App ID
-- App Key
+- App Key (Base64 encoded PKCS#8 private key)
 - User Code
-- 服务器区域（CN/AP1/AP2/EU1）
+- Server Region (CN/AP1/AP2/EU1)
+- Environment (PROD/UAT)
 
-配置将保存到 `~/.notasign/config.json`。其中 `environment` 字段可选，默认为 `PROD`（生产环境），设为 `UAT` 可切换到测试环境。
+Configuration will be saved to `~/.notasign/config.json`.
 
-## 发送信封
+### 2. Send Envelope
 
-### 方式一：交互模式（推荐）
-
-直接运行脚本，按提示输入信息：
+**Interactive Mode:**
 
 ```bash
-npx tsx scripts/send_envelope.ts
+npx @notasign/skill
 ```
 
-### 方式二：命令行参数
+**Command Line Mode:**
 
 ```bash
-npx tsx scripts/send_envelope.ts \
-  --file /path/to/document.pdf \
+npx @notasign/skill --file /path/to/document.pdf \
   --signers '[{"userName":"张三","userEmail":"zhangsan@example.com"}]' \
   --subject "合同签署"
 ```
 
-参数说明：
-- `--file, -f`: 文档路径（必需）
-- `--signers`: 签署人 JSON 数组（必需）
-- `--subject, -s`: 主题（可选，默认使用文件名）
+### Parameters
 
-## 服务器区域
+| Parameter | Alias | Description | Required |
+|-----------|-------|-------------|----------|
+| `--file` | `-f` | Document path (local or URL) | Yes |
+| `--signers` | - | Signers JSON array | Yes |
+| `--subject` | `-s` | Email subject | No |
 
-| 区域 | 说明 |
-|------|------|
-| CN | 中国区 |
-| AP1 | 亚太1区（新加坡）|
-| AP2 | 亚太2区（香港）|
-| EU1 | 欧洲1区（法兰克福）|
+## Server Regions
 
-## 获取凭证
+| Region | Description |
+|--------|-------------|
+| CN | China (openapi-cn.notasign.cn) |
+| AP1 | Asia Pacific 1 - Singapore |
+| AP2 | Asia Pacific 2 - Hong Kong |
+| EU1 | Europe 1 - Frankfurt |
 
-1. 访问 [Nota Sign 控制台](https://account.notasign.com) 注册账号
-2. 进入"集成 → 应用管理"创建应用
-3. 获取 App ID 和 App Key
-4. 获取 User Authorization Code
+## API Usage
 
-## 注意事项
+```typescript
+import { sendDocumentForSigning, createClient } from '@notasign/skill';
 
-- 配置文件建议设置权限：`chmod 600 ~/.notasign/config.json`
-- 支持 PDF、DOC、DOCX 等格式
+// Initialize client
+createClient({
+  appId: 'your-app-id',
+  appKey: 'your-base64-encoded-private-key',
+  userCode: 'your-user-code',
+  serverRegion: 'AP2',
+  environment: 'PROD'
+});
+
+// Send document
+const envelopeId = await sendDocumentForSigning(
+  '/path/to/document.pdf',
+  [{ userName: '张三', userEmail: 'zhangsan@example.com' }],
+  'Contract Signing'
+);
+
+console.log('Envelope ID:', envelopeId);
+```
+
+## Requirements
+
+- Node.js >= 18.0.0
+
+## License
+
+MIT
+
+## Links
+
+- [Nota Sign Console](https://account.notasign.com)
+- [API Documentation](https://docs.notasign.com)
+- [GitHub Repository](https://github.com/notasign/skills)

@@ -1,0 +1,40 @@
+{
+  "name": "@notasign/skill",
+  "version": "1.0.0",
+  "description": "TypeScript implementation for Nota Sign electronic signature platform with complete API coverage",
+  "main": "notasign-skill/scripts/send_envelope.ts",
+  "type": "module",
+  "bin": {
+    "notasign": "./notasign-skill/scripts/send_envelope.ts"
+  },
+  "scripts": {
+    "send": "npx tsx notasign-skill/scripts/send_envelope.ts",
+    "init": "npx tsx notasign-skill/scripts/send_envelope.ts init"
+  },
+  "keywords": [
+    "notasign",
+    "electronic-signature",
+    "esign",
+    "docusign-alternative",
+    "digital-signature",
+    "document-signing"
+  ],
+  "author": "",
+  "license": "MIT",
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "dependencies": {
+    "tsx": "^4.7.0"
+  },
+  "files": [
+    "notasign-skill/",
+    "README.md",
+    "LICENSE"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/notasign/skills.git"
+  },
+  "homepage": "https://github.com/notasign/skills#readme"
+}
